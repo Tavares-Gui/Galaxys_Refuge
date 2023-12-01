@@ -2,9 +2,12 @@ using System;
 
 namespace DTO;
 
-public class ProductData
+public class UserData
 {
     public string Nome { get; set; }
-    public double Preco { get; set; }
-    public string Cupom { get; set; }
+    public string Cpf { get; set; }
+    public DateTime DataNasc { get; set; }
+    public string Numero { get; set; }
+    public string Email { get; set; }
+    public string Senha { get; set; }
 }
