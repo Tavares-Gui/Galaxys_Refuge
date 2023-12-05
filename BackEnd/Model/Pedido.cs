@@ -9,17 +9,21 @@ public partial class Pedido
 
     public int UsuarioId { get; set; }
 
-    public int CuponsID { get; set; }
+    public int CuponsId { get; set; }
 
     public string Cupom { get; set; }
 
     public double Valor { get; set; }
 
+    public bool Finalizado { get; set; }
+
+    public bool Entrege { get; set; }
+
     public DateTime HoraPedido { get; set; }
 
     public bool ValCupom { get; set; }
 
-    public virtual Cupom CuponsNavigation { get; set; }
+    public virtual Cupon Cupons { get; set; }
 
     public virtual ICollection<PedidoProduto> PedidoProdutos { get; } = new List<PedidoProduto>();
 

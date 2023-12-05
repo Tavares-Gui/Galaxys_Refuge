@@ -37,7 +37,7 @@ public partial class GalaxysRefugeDbContext : DbContext
     {
         modelBuilder.Entity<Cupon>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cupons__3214EC275B15D0B7");
+            entity.HasKey(e => e.Id).HasName("PK__Cupons__3214EC27EAEC8F7B");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Codigo)
@@ -46,11 +46,15 @@ public partial class GalaxysRefugeDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("codigo");
             entity.Property(e => e.Desconto).HasColumnName("desconto");
+            entity.Property(e => e.Descricao)
+                .IsRequired()
+                .HasMaxLength(200)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Imagem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Imagem__3214EC275FD44453");
+            entity.HasKey(e => e.Id).HasName("PK__Imagem__3214EC27371DA3A0");
 
             entity.ToTable("Imagem");
 
@@ -60,7 +64,7 @@ public partial class GalaxysRefugeDbContext : DbContext
 
         modelBuilder.Entity<Pedido>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Pedido__3214EC27EFCF998C");
+            entity.HasKey(e => e.Id).HasName("PK__Pedido__3214EC2775F8ED9D");
 
             entity.ToTable("Pedido");
 
@@ -70,6 +74,7 @@ public partial class GalaxysRefugeDbContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("cupom");
+            entity.Property(e => e.CuponsId).HasColumnName("CuponsID");
             entity.Property(e => e.HoraPedido)
                 .HasColumnType("datetime")
                 .HasColumnName("horaPedido");
@@ -77,20 +82,20 @@ public partial class GalaxysRefugeDbContext : DbContext
             entity.Property(e => e.ValCupom).HasColumnName("valCupom");
             entity.Property(e => e.Valor).HasColumnName("valor");
 
-            entity.HasOne(d => d.CuponsNavigation).WithMany(p => p.Pedidos)
-                .HasForeignKey(d => d.Cupons)
+            entity.HasOne(d => d.Cupons).WithMany(p => p.Pedidos)
+                .HasForeignKey(d => d.CuponsId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pedido__Cupons__412EB0B6");
+                .HasConstraintName("FK__Pedido__CuponsID__3E52440B");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Pedidos)
                 .HasForeignKey(d => d.UsuarioId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pedido__UsuarioI__403A8C7D");
+                .HasConstraintName("FK__Pedido__UsuarioI__3D5E1FD2");
         });
 
         modelBuilder.Entity<PedidoProduto>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PedidoPr__3214EC27050103E3");
+            entity.HasKey(e => e.Id).HasName("PK__PedidoPr__3214EC27D1017D5D");
 
             entity.ToTable("PedidoProduto");
 
@@ -112,7 +117,7 @@ public partial class GalaxysRefugeDbContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Post__3214EC276FD3F189");
+            entity.HasKey(e => e.Id).HasName("PK__Post__3214EC27DDAECBE1");
 
             entity.ToTable("Post");
 
@@ -133,9 +138,12 @@ public partial class GalaxysRefugeDbContext : DbContext
 
         modelBuilder.Entity<Produto>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Produtos__3214EC2798D02B9A");
+            entity.HasKey(e => e.Id).HasName("PK__Produtos__3214EC27054F542F");
 
             entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Descricao)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.ImagemId).HasColumnName("ImagemID");
             entity.Property(e => e.Nome)
                 .IsRequired()
@@ -144,12 +152,12 @@ public partial class GalaxysRefugeDbContext : DbContext
 
             entity.HasOne(d => d.Imagem).WithMany(p => p.Produtos)
                 .HasForeignKey(d => d.ImagemId)
-                .HasConstraintName("FK__Produtos__Imagem__3B75D760");
+                .HasConstraintName("FK__Produtos__Imagem__412EB0B6");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Usuario__3214EC27657E1A17");
+            entity.HasKey(e => e.Id).HasName("PK__Usuario__3214EC274DDAF9B5");
 
             entity.ToTable("Usuario");
 

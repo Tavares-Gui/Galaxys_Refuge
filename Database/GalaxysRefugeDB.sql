@@ -36,19 +36,12 @@ create table Usuario(
 
 go
 
-create table Produtos(
-	ID int identity primary key,
-	Nome varchar(80) not null,
-	Preco float not null,
-	ImagemID int references Imagem(ID)
-);
-
-go
 
 create table Cupons(
 	ID int identity primary key,
 	codigo varchar(10) not null,
-	desconto float not null
+	desconto float not null,
+	Descricao varchar(200) not null
 );
 
 go
@@ -59,8 +52,20 @@ create table Pedido(
 	CuponsID int references Cupons(ID) not null,
 	cupom varchar(50) not null,
 	valor float not null,
+	Finalizado bit not null,
+	Entrege bit not null,
 	horaPedido datetime not null,
 	valCupom bit not null
+);
+
+go
+
+create table Produtos(
+	ID int identity primary key,
+	Nome varchar(80) not null,
+	Preco float not null,
+	Descricao varchar(255),
+	ImagemID int references Imagem(ID)
 );
 
 go
@@ -80,3 +85,5 @@ create table Post(
 	ImagemID int references Imagem(ID) not null
 );
 go
+
+select * from Produtos 

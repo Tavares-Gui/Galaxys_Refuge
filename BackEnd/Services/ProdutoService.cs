@@ -21,7 +21,7 @@ public class ProdutoService : IProdutoService
 
         produto.Nome = data.Nome;
         produto.Preco = data.Preco;
-        produto.Cupom = data.Cupom;
+        produto.Descricao = data.Descricao;
 
         this.ctx.Add(produto);
         await this.ctx.SaveChangesAsync();
