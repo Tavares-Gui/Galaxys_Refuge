@@ -1,9 +1,9 @@
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using DTO;
-using Back.Model;
 using System;
+using Back.Model;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Back.Services;
 
@@ -22,6 +22,7 @@ public class ProdutoService : IProdutoService
         produto.Nome = data.Nome;
         produto.Preco = data.Preco;
         produto.Descricao = data.Descricao;
+        // produto.Imagem = data.Imagem;
 
         this.ctx.Add(produto);
         await this.ctx.SaveChangesAsync();

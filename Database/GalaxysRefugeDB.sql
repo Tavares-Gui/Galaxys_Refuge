@@ -85,5 +85,3 @@ create table Post(
 	ImagemID int references Imagem(ID) not null
 );
 go
-
-select * from Produtos 

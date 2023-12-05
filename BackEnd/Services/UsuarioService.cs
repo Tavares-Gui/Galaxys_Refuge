@@ -1,9 +1,9 @@
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using DTO;
-using Back.Model;
 using System;
+using Back.Model;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Back.Services;
 
