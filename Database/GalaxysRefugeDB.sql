@@ -48,14 +48,8 @@ go
 
 create table Pedido(
 	ID int identity primary key,
-	UsuarioID int references Usuario(ID) not null,
-	CuponsID int references Cupons(ID) not null,
-	cupom varchar(50) not null,
-	valor float not null,
-	Finalizado bit not null,
-	Entrege bit not null,
-	horaPedido datetime not null,
-	valCupom bit not null
+	Pronto bit not null,
+	Entregue bit not null
 );
 
 go
@@ -70,11 +64,10 @@ create table Produtos(
 
 go
 
-create table PedidoProduto(
+create table ProdutosPedidos(
 	ID int identity primary key,
-	UsuarioID int references Usuario(ID) not null,
-	PedidoID int references Pedido(ID) not null,
-	qtdProduto int not null
+	ProdutoID int references Produtos(ID),
+	PedidoID int references Pedido(ID)
 );
 
 go

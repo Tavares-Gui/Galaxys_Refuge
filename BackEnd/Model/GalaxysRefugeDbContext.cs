@@ -21,11 +21,11 @@ public partial class GalaxysRefugeDbContext : DbContext
 
     public virtual DbSet<Pedido> Pedidos { get; set; }
 
-    public virtual DbSet<PedidoProduto> PedidoProdutos { get; set; }
-
     public virtual DbSet<Post> Posts { get; set; }
 
     public virtual DbSet<Produto> Produtos { get; set; }
+
+    public virtual DbSet<ProdutosPedido> ProdutosPedidos { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
@@ -37,7 +37,7 @@ public partial class GalaxysRefugeDbContext : DbContext
     {
         modelBuilder.Entity<Cupon>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cupons__3214EC27EAEC8F7B");
+            entity.HasKey(e => e.Id).HasName("PK__Cupons__3214EC27C6CE5AE4");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Codigo)
@@ -54,7 +54,7 @@ public partial class GalaxysRefugeDbContext : DbContext
 
         modelBuilder.Entity<Imagem>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Imagem__3214EC27371DA3A0");
+            entity.HasKey(e => e.Id).HasName("PK__Imagem__3214EC27557B7DB3");
 
             entity.ToTable("Imagem");
 
@@ -64,60 +64,16 @@ public partial class GalaxysRefugeDbContext : DbContext
 
         modelBuilder.Entity<Pedido>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Pedido__3214EC2775F8ED9D");
+            entity.HasKey(e => e.Id).HasName("PK__Pedido__3214EC27E6566E57");
 
             entity.ToTable("Pedido");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Cupom)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("cupom");
-            entity.Property(e => e.CuponsId).HasColumnName("CuponsID");
-            entity.Property(e => e.HoraPedido)
-                .HasColumnType("datetime")
-                .HasColumnName("horaPedido");
-            entity.Property(e => e.UsuarioId).HasColumnName("UsuarioID");
-            entity.Property(e => e.ValCupom).HasColumnName("valCupom");
-            entity.Property(e => e.Valor).HasColumnName("valor");
-
-            entity.HasOne(d => d.Cupons).WithMany(p => p.Pedidos)
-                .HasForeignKey(d => d.CuponsId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pedido__CuponsID__3E52440B");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.Pedidos)
-                .HasForeignKey(d => d.UsuarioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pedido__UsuarioI__3D5E1FD2");
-        });
-
-        modelBuilder.Entity<PedidoProduto>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__PedidoPr__3214EC27D1017D5D");
-
-            entity.ToTable("PedidoProduto");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
-            entity.Property(e => e.QtdProduto).HasColumnName("qtdProduto");
-            entity.Property(e => e.UsuarioId).HasColumnName("UsuarioID");
-
-            entity.HasOne(d => d.Pedido).WithMany(p => p.PedidoProdutos)
-                .HasForeignKey(d => d.PedidoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PedidoPro__Pedid__44FF419A");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.PedidoProdutos)
-                .HasForeignKey(d => d.UsuarioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__PedidoPro__Usuar__440B1D61");
         });
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Post__3214EC27DDAECBE1");
+            entity.HasKey(e => e.Id).HasName("PK__Post__3214EC27B2E7172D");
 
             entity.ToTable("Post");
 
@@ -128,17 +84,17 @@ public partial class GalaxysRefugeDbContext : DbContext
             entity.HasOne(d => d.Imagem).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.ImagemId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Post__ImagemID__48CFD27E");
+                .HasConstraintName("FK__Post__ImagemID__46E78A0C");
 
             entity.HasOne(d => d.Produtos).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.ProdutosId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Post__ProdutosID__47DBAE45");
+                .HasConstraintName("FK__Post__ProdutosID__45F365D3");
         });
 
         modelBuilder.Entity<Produto>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Produtos__3214EC27054F542F");
+            entity.HasKey(e => e.Id).HasName("PK__Produtos__3214EC276704485D");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Descricao)
@@ -152,12 +108,29 @@ public partial class GalaxysRefugeDbContext : DbContext
 
             entity.HasOne(d => d.Imagem).WithMany(p => p.Produtos)
                 .HasForeignKey(d => d.ImagemId)
-                .HasConstraintName("FK__Produtos__Imagem__412EB0B6");
+                .HasConstraintName("FK__Produtos__Imagem__3F466844");
+        });
+
+        modelBuilder.Entity<ProdutosPedido>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Produtos__3214EC273D71B81B");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.PedidoId).HasColumnName("PedidoID");
+            entity.Property(e => e.ProdutoId).HasColumnName("ProdutoID");
+
+            entity.HasOne(d => d.Pedido).WithMany(p => p.ProdutosPedidos)
+                .HasForeignKey(d => d.PedidoId)
+                .HasConstraintName("FK__ProdutosP__Pedid__4316F928");
+
+            entity.HasOne(d => d.Produto).WithMany(p => p.ProdutosPedidos)
+                .HasForeignKey(d => d.ProdutoId)
+                .HasConstraintName("FK__ProdutosP__Produ__4222D4EF");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Usuario__3214EC274DDAF9B5");
+            entity.HasKey(e => e.Id).HasName("PK__Usuario__3214EC27B7CFC638");
 
             entity.ToTable("Usuario");
 

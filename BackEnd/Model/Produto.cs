@@ -18,4 +18,6 @@ public partial class Produto
     public virtual Imagem Imagem { get; set; }
 
     public virtual ICollection<Post> Posts { get; } = new List<Post>();
+
+    public virtual ICollection<ProdutosPedido> ProdutosPedidos { get; } = new List<ProdutosPedido>();
 }

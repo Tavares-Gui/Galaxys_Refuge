@@ -38,69 +38,69 @@ public class ProdutoController : ControllerBase
         return Ok();
     }
 
+    [HttpGet("image/{photoId}")]
+    [EnableCors("DefaultPolicy")]
+    public async Task<IActionResult> GetImage(
+        int photoId,
+        [FromServices]ISecurityService security,
+        [FromServices]GalaxysRefugeDbContext ctx
+    )
+    {
 
+        var query =
+            from image in ctx.Imagems
+            where image.Id == photoId
+            select image;
 
+        var photo = await query.FirstOrDefaultAsync();
+        if(photo is null)
+            return NotFound();
 
+        return File(photo.Foto, "image/jpeg");
+    }
+    
 
+    [DisableRequestSizeLimit]
+    [HttpPost("imagem")]
+    [EnableCors("DefaultPolicy")]
+    public async Task<IActionResult> AddImage(
+        [FromServices]CryptoService security
+    )
+    {
+        var jwtData = Request.Form["jwt"];
+        var jwtObj = JsonSerializer
+            .Deserialize<JwtToken>(jwtData);
 
+        var jwt = jwtObj.jwt;
 
+        var userOjb = security
+            .Validate<JwtPayload>(jwt);
 
-    // [HttpGet("image")]
-    // [EnableCors("DefaultPolicy")]
-    // public async Task<IActionResult> GetImage(
-    //     int photoId,
-    //     [FromServices]ISecurityService security,
-    //     [FromServices]GalaxysRefugeDbContext ctx)
-    // {
-    //     var query =
-    //         from image in ctx.Imagems
-    //         where image.Id == photoId
-    //         select image;
+        if (userOjb is null)
+            return Unauthorized();
+        var userId = userOjb.id;
+
+        var files = Request.Form.Files;
+        if (files is null || files.Count == 0)
+            return BadRequest();
+
+        var file = Request.Form.Files[0];
+        if (file.Length < 1)
+            return BadRequest();
         
-    //     var photo = await query.FirstOrDefaultAsync();
-    //     if (photo is null)
-    //         return NotFound();
+        using MemoryStream ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        var data = ms.GetBuffer();
 
-    //     return File(photo.Foto, "image/jpeg");
-    // }
+        Imagem img = new Imagem();
+        img.Foto = data;
 
-    // [DisableRequestSizeLimit]
-    // [HttpPut("image")]
-    // [EnableCors("DefaultPolicy")]
-    // public async Task<IActionResult> AddImage(
-    //     [FromServices]ISecurityService security
-    // )
-    // {
-    //     var jwtData = Request.Form["jwt"];
-    //     var jwtObj = JsonSerializer
-    //         .Deserialize<JwtToken>(jwtData);
-    //     var jwt = jwtObj.jwt;
+        GalaxysRefugeDbContext ctx = new GalaxysRefugeDbContext();
+        ctx.Add(img);
+        await ctx.SaveChangesAsync();
 
-    //     var userOjb = await security
-    //         .ValidateJwt<JwtPayload>(jwt);
-    //     if (userOjb is null)
-    //         return Unauthorized();
-    //     var userId = userOjb.id;
-
-    //     var files = Request.Form.Files;
-    //     if (files is null || files.Count == 0)
-    //         return BadRequest();
-        
-    //     var file = Request.Form.Files[0];
-    //     if (file.Length < 1)
-    //         return BadRequest();
- 
-    //     using MemoryStream ms = new MemoryStream();
-    //     await file.CopyToAsync(ms);
-    //     var data = ms.GetBuffer();
-
-    //     Imagem img = new Imagem();
-    //     img.Foto = data;
-
-    //     GalaxysRefugeDbContext ctx = new GalaxysRefugeDbContext();
-    //     ctx.Add(img);
-    //     await ctx.SaveChangesAsync();
-
-    //     return Ok();
-    // }
+        return Ok(new {
+            imgID = img.Id
+        });
+    }
 }

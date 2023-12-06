@@ -22,7 +22,7 @@ public class ProdutoService : IProdutoService
         produto.Nome = data.Nome;
         produto.Preco = data.Preco;
         produto.Descricao = data.Descricao;
-        // produto.Imagem = data.Imagem;
+        produto.ImagemId = data.ImagemId;
 
         this.ctx.Add(produto);
         await this.ctx.SaveChangesAsync();

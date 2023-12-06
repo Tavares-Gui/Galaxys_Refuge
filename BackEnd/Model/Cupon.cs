@@ -12,6 +12,4 @@ public partial class Cupon
     public double Desconto { get; set; }
 
     public string Descricao { get; set; }
-
-    public virtual ICollection<Pedido> Pedidos { get; } = new List<Pedido>();
 }

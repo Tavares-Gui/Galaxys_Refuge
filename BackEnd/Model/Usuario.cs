@@ -22,8 +22,4 @@ public partial class Usuario
     public string Salt { get; set; }
 
     public bool Adm { get; set; }
-
-    public virtual ICollection<PedidoProduto> PedidoProdutos { get; } = new List<PedidoProduto>();
-
-    public virtual ICollection<Pedido> Pedidos { get; } = new List<Pedido>();
 }
